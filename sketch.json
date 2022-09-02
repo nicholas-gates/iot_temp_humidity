@@ -1,0 +1,22 @@
+{
+  "cpu": {
+    "fqbn": "esp32:esp32:heltec_wifi_kit_32:CPUFreq=240,DebugLevel=verbose,PSRAM=disabled,UploadSpeed=115200",
+    "name": "Heltec WiFi Kit 32",
+    "type": "serial"
+  },
+  "secrets": [
+    {
+      "name": "SECRET_SSID",
+      "value": ""
+    },
+    {
+      "name": "SECRET_PASS",
+      "value": ""
+    },
+    {
+      "name": "SECRET_DEVICE_KEY",
+      "value": ""
+    }
+  ],
+  "included_libs": []
+}

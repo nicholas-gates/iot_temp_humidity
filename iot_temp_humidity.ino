@@ -1,5 +1,4 @@
 // Heltec ESP32 Dev-Boards - Version: Latest
-#include "arduino_secrets_teakport.h"
 #include "thingProperties.h"
 
 #include "heltec.h"
@@ -11,10 +10,6 @@
 #include <iostream>
 #include <vector>
 
-// refs
-// https://bit.ly/3Rn71sE
-
-int MYLED = 13;
 std::vector<String> screenOutput;
 
 // void writeLine(String str, int row = 10, bool clear = true, bool writeToSerial = true);
@@ -42,8 +37,6 @@ void setup()
   cloudInit();
 
   dht.begin();
-
-  pinMode(MYLED, OUTPUT);
 }
 
 void loop()
@@ -53,7 +46,6 @@ void loop()
   ArduinoCloud.update();
 
   random_value = random(0, 500);
-  // writeLine("Random Value: " + String(random_value), 20), true;
   screenOutput.push_back("Random Value: " + String(random_value));
 
   processDht();
@@ -70,37 +62,25 @@ void processDht()
 
   if (isnan(humidity) || isnan(tempCel || isnan(tempFahr)))
   {
-    // writeLine("Failed to read from DHT sensor!");
     screenOutput.push_back("Failed to read from DHT sensor!");
     return;
   }
 
-  // String lines[] = {
-  //     "Humidity: " + String(humidity) + " %",
-  //     "Temperature (C): " + String(tempCel) + " *C",
-  //     "Temperature (F): " + String(tempFahr) + " *F",
-  // };
-
   screenOutput.push_back("Humidity: " + String(humidity) + " %");
   screenOutput.push_back("Temperature (C): " + String(tempCel) + " *C");
   screenOutput.push_back("Temperature (F): " + String(tempFahr) + " *F");
-
 }
 
 void onLedSwitchChange()
 {
-  // Do something
   if (led_switch)
   {
-    digitalWrite(MYLED, HIGH);
+    screenOutput.push_back("Toggled: LED ON (" + String(led_switch) + ")");
   }
   else
   {
-    digitalWrite(MYLED, LOW);
+    screenOutput.push_back("Toggled: LED OFF (" + String(led_switch) + ")");
   }
-
-  // writeLine("---> led_switch = " + String(led_switch), true);
-  screenOutput.push_back("---> led_switch = " + String(led_switch));
 }
 
 void setupDisplay()
@@ -121,12 +101,12 @@ void logo()
 }
 
 /**
- * @brief This function writes a line to the OLED display
+ * @brief This function writes a vector of strings and outputs them to the OLED display
  *
- * @param vector<String> lines
- * @param int row
- * @param bool clear
- * @param bool writeToSerial
+ * @param vector<String> lines: The strings to be displayed on screen
+ * @param bool clear: If true, the display will not be cleared before writing the lines
+ * @param bool writeToSerial: If true, the lines will also be written to the serial output
+ * @return void
  */
 void writeLines(std::vector<String> lines, bool clear, bool writeToSerial)
 {
@@ -151,59 +131,6 @@ void writeLines(std::vector<String> lines, bool clear, bool writeToSerial)
 
   Heltec.display->display();
 }
-
-
-// void writeLine(String str, int row, bool clear, bool writeToSerial)
-// void writeLine()
-// {
-//   if (writeToSerial)
-//   {
-//     Serial.println(str);
-//   }
-
-//   if (clear)
-//   {
-//     Heltec.display->clear();
-//   }
-
-//   Heltec.display->setFont(ArialMT_Plain_10);
-
-//   Heltec.display->drawString(0, row, str);
-
-//   Heltec.display->display();
-// }
-
-/**
- * @brief This function takes an array of strings and outputs them to the OLED display
- * @param lines: The array of strings to be displayed
- * @param clear: If true, the display will not be cleared before writing the lines
- * @param writeToSerial: If true, the lines will also be written to the serial output
- * @return void
- */
-// void writeLines(String lines[], bool clear, bool writeToSerial)
-// {
-//   if (writeToSerial)
-//   {
-//     for (int i = 0; i < sizeof(lines); i++)
-//     {
-//       Serial.println(lines[i]);
-//     }
-//   }
-
-//   if (clear)
-//   {
-//     Heltec.display->clear();
-//   }
-
-//   Heltec.display->setFont(ArialMT_Plain_10);
-
-//   for (int i = 0; i < sizeof(lines); i++)
-//   {
-//     Heltec.display->drawString(0, i * 10, lines[i]);
-//   }
-
-//   Heltec.display->display();
-// }
 
 void serialInit()
 {
